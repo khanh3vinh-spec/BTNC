@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Chuyển ảnh, pdf thành mathtype",
+  "description": "Một công cụ tinh vi để chuyển đổi hình,pdf  thành văn bản định dạng LaTeX rõ ràng",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}
