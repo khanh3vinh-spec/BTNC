@@ -1,6 +1,49 @@
 
 import { GoogleGenAI } from "@google/genai";
 
+const SYSTEM_INSTRUCTION = `You are a high-level mathematical OCR specialist.`;
+
+export async function convertFileToLatex(
+  base64Data: string,
+  mimeType: string
+): Promise<string> {
+
+  const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY
+  });
+
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+
+      contents: {
+        parts: [
+          {
+            inlineData: {
+              data: base64Data,
+              mimeType: mimeType,
+            },
+          },
+          {
+            text: "Retype this math document accurately."
+          }
+        ],
+      },
+
+      config: {
+        systemInstruction: SYSTEM_INSTRUCTION,
+        temperature: 0.1,
+      },
+    });
+
+    return response.text || '';
+
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    throw error;
+  }
+}
+
 const SYSTEM_INSTRUCTION = `You are a high-level mathematical OCR specialist. 
 Your task is to convert images or PDF documents of math content into clear, high-quality Markdown text with LaTeX formulas.
 
